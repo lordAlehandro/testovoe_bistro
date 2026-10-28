@@ -1,0 +1,43 @@
+# Весь проект одной командой: docker compose up --build
+# Откройте http://localhost:8081. Первый запуск заполняет базу (~30 с).
+
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: registry
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Скрипты из этой папки PostgreSQL выполняет сам при первом запуске (на пустом томе): схема, затем данные.
+      - ./server/db:/docker-entrypoint-initdb.d:ro
+    ports:
+      - '127.0.0.1:5433:5432' # для режима разработки (npm run dev в server)
+    healthcheck:
+      # Проверка по TCP: во время первичного заполнения база слушает только локальный сокет,
+      # поэтому сервер API стартует, когда данные уже готовы.
+      test: ['CMD-SHELL', 'pg_isready -h 127.0.0.1 -U postgres -d registry']
+      interval: 3s
+      timeout: 3s
+      retries: 60
+      start_period: 120s
+
+  api:
+    build: ./server
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/registry
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build: ./web
+    restart: unless-stopped
+    ports:
+      - '8081:80'
+    depends_on:
+      - api
+
+volumes:
+  pgdata:

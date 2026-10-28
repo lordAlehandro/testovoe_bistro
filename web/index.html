@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Картотека граждан</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><circle cx='12' cy='12' r='10' fill='%23673ab7'/><circle cx='12' cy='12' r='4' fill='white'/></svg>" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" />
+    <!--
+      Тема ставится до загрузки приложения: иначе при тёмной теме на миг мелькнёт белая страница.
+      Ключ 'mui-mode' и классы .light/.dark — те же, что использует MUI (см. src/theme.ts).
+    -->
+    <script>
+      try {
+        document.documentElement.classList.add(localStorage.getItem('mui-mode') === 'dark' ? 'dark' : 'light');
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

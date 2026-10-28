@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    // Резолвинг как у Vite: импорт без расширений.
+    "moduleResolution": "bundler",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "types": ["vite/client"],
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    // Импорт из src без цепочек ../../: '@/lib/api'. Тот же алиас — в vite.config.ts.
+    "paths": { "@/*": ["./src/*"] }
+  },
+  "include": ["src"]
+}
